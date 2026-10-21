@@ -1,3 +1,5 @@
+import { IS_DEMO } from './api';
+
 const relative = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
 
 export function timeAgo(ms: number | null, now = Date.now()): string {
@@ -43,10 +45,20 @@ export function shortSha(sha: string): string {
   return sha.slice(0, 7);
 }
 
+/**
+ * Links to the project's repository on GitHub. The demo's sample projects
+ * are fictional, so there they return null and the UI shows plain text.
+ */
+export function repoUrl(repository: string | null): string | null {
+  return repository && !IS_DEMO ? `https://github.com/${repository}` : null;
+}
+
 export function commitUrl(repository: string | null, sha: string): string | null {
-  return repository ? `https://github.com/${repository}/commit/${sha}` : null;
+  const repo = repoUrl(repository);
+  return repo ? `${repo}/commit/${sha}` : null;
 }
 
 export function pullUrl(repository: string | null, pr: number): string | null {
-  return repository ? `https://github.com/${repository}/pull/${pr}` : null;
+  const repo = repoUrl(repository);
+  return repo ? `${repo}/pull/${pr}` : null;
 }

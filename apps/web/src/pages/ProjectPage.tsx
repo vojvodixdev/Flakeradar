@@ -6,7 +6,7 @@ import { OutcomeStrip } from '../components/OutcomeStrip';
 import { SetupInstructions } from '../components/Setup';
 import { ScoreMeter, StatusDistribution, StatusPill, STATUS_LABEL, STATUS_ORDER } from '../components/Status';
 import { TrendChart } from '../components/TrendChart';
-import { commitUrl, dateTime, duration, percent, plural, pullUrl, shortSha, timeAgo } from '../format';
+import { commitUrl, dateTime, duration, percent, plural, pullUrl, repoUrl, shortSha, timeAgo } from '../format';
 import { useAsync, useDebounced, useDocumentTitle } from '../hooks';
 
 type Filter = TestStatus | 'quarantined' | '';
@@ -44,9 +44,13 @@ export function ProjectPage() {
           <h1 className="page-title">{o.project.name}</h1>
           <p className="project-meta">
             {o.project.repository ? (
-              <a href={`https://github.com/${o.project.repository}`} target="_blank" rel="noreferrer">
-                {o.project.repository}
-              </a>
+              repoUrl(o.project.repository) ? (
+                <a href={repoUrl(o.project.repository)!} target="_blank" rel="noreferrer">
+                  {o.project.repository}
+                </a>
+              ) : (
+                <code>{o.project.repository}</code>
+              )
             ) : (
               'No repository linked'
             )}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import { DEMO_START, IS_DEMO, onAdminTokenNeeded, PROJECTS_PATH } from './api';
 import { AdminTokenDialog, Empty } from './components/Common';
+import { useDocumentTitle } from './hooks';
 import { ProjectPage } from './pages/ProjectPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { TestPage } from './pages/TestPage';
@@ -55,16 +56,7 @@ export function App() {
           )}
           <Route path="/projects/:slug" element={<ProjectPage />} />
           <Route path="/projects/:slug/tests/:testId" element={<TestPage />} />
-          <Route
-            path="*"
-            element={
-              <Empty title="This page does not exist.">
-                <Link to={PROJECTS_PATH} className="btn">
-                  Go to projects
-                </Link>
-              </Empty>
-            }
-          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
@@ -81,5 +73,16 @@ function Logo() {
       <rect x="11" y="3" width="3" height="16" rx="1" className="logo-fail" />
       <rect x="16" y="13" width="3" height="6" rx="1" className="logo-pass" />
     </svg>
+  );
+}
+
+function NotFound() {
+  useDocumentTitle('Page not found');
+  return (
+    <Empty title="This page does not exist.">
+      <Link to={PROJECTS_PATH} className="btn">
+        Go to projects
+      </Link>
+    </Empty>
   );
 }
