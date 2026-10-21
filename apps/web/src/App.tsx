@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
-import { onAdminTokenNeeded } from './api';
+import { IS_DEMO, onAdminTokenNeeded } from './api';
 import { AdminTokenDialog, Empty } from './components/Common';
 import { ProjectPage } from './pages/ProjectPage';
 import { ProjectsPage } from './pages/ProjectsPage';
@@ -31,6 +31,11 @@ export function App() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      {IS_DEMO && (
+        <p className="demo-banner">
+          Live demo with sample data from two fictional projects. Changes are not saved.
+        </p>
+      )}
       <header className="topbar">
         <Link to="/" className="wordmark" aria-label="FlakeRadar, all projects">
           <Logo />

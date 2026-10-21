@@ -7,18 +7,15 @@ import type {
   TestDetail,
   TestListItem,
 } from '@flakeradar/core';
+import { demoApi } from './demo/demoApi';
+import { ApiRequestError } from './errors';
+
+export { ApiRequestError };
 
 const ADMIN_TOKEN_KEY = 'flakeradar.adminToken';
 
-export class ApiRequestError extends Error {
-  constructor(
-    readonly status: number,
-    readonly code: string,
-    message: string,
-  ) {
-    super(message);
-  }
-}
+/** True in the static demo build, which runs without a backend. */
+export const IS_DEMO = import.meta.env.VITE_DEMO === '1';
 
 function readStoredToken(): string | null {
   try {
@@ -80,7 +77,7 @@ async function request<T>(method: string, path: string, body?: unknown, admin = 
 
 const enc = encodeURIComponent;
 
-export const api = {
+const serverApi = {
   projects: () => request<ProjectListItem[]>('GET', '/api/projects'),
   createProject: (input: { name: string; repository?: string; defaultBranch?: string }) =>
     request<CreatedProject>('POST', '/api/projects', input, true),
@@ -95,3 +92,5 @@ export const api = {
     request<TestDetail>('PATCH', `/api/projects/${enc(slug)}/tests/${id}`, { quarantined }, true),
   runs: (slug: string) => request<RunListItem[]>('GET', `/api/projects/${enc(slug)}/runs?limit=100`),
 };
+
+export const api: typeof serverApi = IS_DEMO ? demoApi : serverApi;

@@ -175,6 +175,14 @@ pre,
 
 /* ---- Shell ------------------------------------------------------------- */
 
+.demo-banner {
+  padding: 8px 16px;
+  background: var(--accent-soft);
+  color: var(--ink-2);
+  font-size: 13px;
+  text-align: center;
+}
+
 .topbar {
   display: flex;
   align-items: center;

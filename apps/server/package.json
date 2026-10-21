@@ -11,6 +11,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "seed": "tsx src/seed.ts",
+    "export-demo": "tsx src/export-demo.ts",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

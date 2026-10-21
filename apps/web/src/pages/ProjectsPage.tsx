@@ -1,7 +1,7 @@
 import type { CreatedProject, ProjectListItem } from '@flakeradar/core';
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { api, ApiRequestError } from '../api';
+import { api, ApiRequestError, IS_DEMO } from '../api';
 import { Empty, ErrorState, Loading } from '../components/Common';
 import { SetupInstructions } from '../components/Setup';
 import { StatusDistribution } from '../components/Status';
@@ -39,7 +39,7 @@ export function ProjectsPage() {
           <h1 className="page-title">Projects</h1>
           <p className="lede">Each project tracks the tests of one repository.</p>
         </div>
-        {!creating && (
+        {!creating && !IS_DEMO && (
           <button type="button" className="btn btn-primary" onClick={() => setCreating(true)}>
             New project
           </button>

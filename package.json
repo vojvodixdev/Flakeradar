@@ -17,6 +17,7 @@
     "build": "npm run build -w @flakeradar/core && npm run build -w @flakeradar/server && npm run build -w @flakeradar/web",
     "dev": "npm run build -w @flakeradar/core && concurrently -n server,web -c blue,magenta \"npm run dev -w @flakeradar/server\" \"npm run dev -w @flakeradar/web\"",
     "seed": "npm run build -w @flakeradar/core && npm run seed -w @flakeradar/server",
+    "build:demo": "npm run build -w @flakeradar/core && npm run export-demo -w @flakeradar/server && npm run build:demo -w @flakeradar/web",
     "start": "npm run start -w @flakeradar/server",
     "test": "npm run build -w @flakeradar/core && npm run test -w @flakeradar/core && npm run test -w @flakeradar/server",
     "typecheck": "npm run build -w @flakeradar/core && npm run typecheck -w @flakeradar/server && npm run typecheck -w @flakeradar/web"

@@ -263,7 +263,12 @@ npm test          # unit tests (core) and API tests (server, in-memory SQLite)
 npm run typecheck
 npm run build     # core, server and dashboard
 npm start         # serves the API and the built dashboard on :3000
+npm run build:demo  # static, backend-free demo in apps/web/dist-demo
 ```
+
+The static demo bundles a snapshot of the seeded demo data, so it can be
+hosted on any static site (or opened straight from disk) without a server.
+Dates are shifted at load time so the sample data always looks recent.
 
 ## Roadmap
 

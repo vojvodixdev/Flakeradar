@@ -141,3 +141,22 @@ export interface ApiError {
   message: string;
   details?: unknown;
 }
+
+/**
+ * Everything the dashboard needs, captured from a seeded server. Used by the
+ * static demo build, which runs without a backend.
+ */
+export interface DemoSnapshot {
+  /** When the data was captured; the demo shifts dates so they stay recent. */
+  generatedAt: number;
+  projects: ProjectListItem[];
+  byProject: Record<
+    string,
+    {
+      overview: ProjectOverview;
+      tests: TestListItem[];
+      runs: RunListItem[];
+      details: Record<string, TestDetail>;
+    }
+  >;
+}

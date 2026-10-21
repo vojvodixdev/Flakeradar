@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-demo/
 coverage/
 *.db
 *.db-journal
@@ -8,3 +9,4 @@ coverage/
 data/
 .env
 .DS_Store
+apps/web/src/demo/snapshot.json
