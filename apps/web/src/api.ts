@@ -17,6 +17,14 @@ const ADMIN_TOKEN_KEY = 'flakeradar.adminToken';
 /** True in the static demo build, which runs without a backend. */
 export const IS_DEMO = import.meta.env.VITE_DEMO === '1';
 
+/**
+ * Where the list of projects lives. The demo opens straight on a project
+ * (the list of two sample projects is not much of a first impression), so
+ * there the list moves to /projects.
+ */
+export const PROJECTS_PATH = IS_DEMO ? '/projects' : '/';
+export const DEMO_START = '/projects/acme-storefront';
+
 function readStoredToken(): string | null {
   try {
     return localStorage.getItem(ADMIN_TOKEN_KEY);

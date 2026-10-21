@@ -1,6 +1,6 @@
 import type { ProjectOverview, RunListItem, TestListItem, TestStatus } from '@flakeradar/core';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { api } from '../api';
+import { api, PROJECTS_PATH } from '../api';
 import { Empty, ErrorState, Loading } from '../components/Common';
 import { OutcomeStrip } from '../components/OutcomeStrip';
 import { SetupInstructions } from '../components/Setup';
@@ -37,7 +37,7 @@ export function ProjectPage() {
   return (
     <div className="page">
       <nav className="crumbs" aria-label="Breadcrumb">
-        <Link to="/">Projects</Link>
+        <Link to={PROJECTS_PATH}>Projects</Link>
       </nav>
       <div className="page-head">
         <div>

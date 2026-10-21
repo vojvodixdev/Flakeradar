@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
-import { IS_DEMO, onAdminTokenNeeded } from './api';
+import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { DEMO_START, IS_DEMO, onAdminTokenNeeded, PROJECTS_PATH } from './api';
 import { AdminTokenDialog, Empty } from './components/Common';
 import { ProjectPage } from './pages/ProjectPage';
 import { ProjectsPage } from './pages/ProjectsPage';
@@ -37,7 +37,7 @@ export function App() {
         </p>
       )}
       <header className="topbar">
-        <Link to="/" className="wordmark" aria-label="FlakeRadar, all projects">
+        <Link to={PROJECTS_PATH} className="wordmark" aria-label="FlakeRadar, all projects">
           <Logo />
           <span>FlakeRadar</span>
         </Link>
@@ -45,14 +45,21 @@ export function App() {
 
       <main id="main" className="main">
         <Routes>
-          <Route path="/" element={<ProjectsPage />} />
+          {IS_DEMO ? (
+            <>
+              <Route path="/" element={<Navigate to={DEMO_START} replace />} />
+              <Route path={PROJECTS_PATH} element={<ProjectsPage />} />
+            </>
+          ) : (
+            <Route path="/" element={<ProjectsPage />} />
+          )}
           <Route path="/projects/:slug" element={<ProjectPage />} />
           <Route path="/projects/:slug/tests/:testId" element={<TestPage />} />
           <Route
             path="*"
             element={
               <Empty title="This page does not exist.">
-                <Link to="/" className="btn">
+                <Link to={PROJECTS_PATH} className="btn">
                   Go to projects
                 </Link>
               </Empty>

@@ -1,7 +1,7 @@
 import type { HistoryEntry, TestDetail } from '@flakeradar/core';
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api } from '../api';
+import { api, PROJECTS_PATH } from '../api';
 import { ErrorState, Loading } from '../components/Common';
 import { ScoreMeter, StatusPill, STATUS_HELP } from '../components/Status';
 import { commitUrl, dateTime, duration, percent, plural, pullUrl, shortSha, timeAgo } from '../format';
@@ -45,7 +45,7 @@ export function TestPage() {
   return (
     <div className="page">
       <nav className="crumbs" aria-label="Breadcrumb">
-        <Link to="/">Projects</Link>
+        <Link to={PROJECTS_PATH}>Projects</Link>
         <Link to={`/projects/${slug}`}>{project?.name ?? slug}</Link>
       </nav>
 

@@ -1,7 +1,7 @@
 import type { CreatedProject, ProjectListItem } from '@flakeradar/core';
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { api, ApiRequestError, IS_DEMO } from '../api';
+import { api, ApiRequestError, IS_DEMO, PROJECTS_PATH } from '../api';
 import { Empty, ErrorState, Loading } from '../components/Common';
 import { SetupInstructions } from '../components/Setup';
 import { StatusDistribution } from '../components/Status';
@@ -18,7 +18,7 @@ export function ProjectsPage() {
     return (
       <div className="page page-narrow">
         <nav className="crumbs" aria-label="Breadcrumb">
-          <Link to="/">Projects</Link>
+          <Link to={PROJECTS_PATH}>Projects</Link>
         </nav>
         <h1 className="page-title">{created.project.name} is ready</h1>
         <p className="lede">Connect it to your CI in three steps.</p>
