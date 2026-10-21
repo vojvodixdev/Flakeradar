@@ -1,0 +1,30 @@
+{
+  "name": "flakeradar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted flaky test detection for CI: ingests JUnit reports, scores every test for flakiness and comments on pull requests.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "apps/server",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "npm run build -w @flakeradar/core && npm run build -w @flakeradar/server && npm run build -w @flakeradar/web",
+    "dev": "npm run build -w @flakeradar/core && concurrently -n server,web -c blue,magenta \"npm run dev -w @flakeradar/server\" \"npm run dev -w @flakeradar/web\"",
+    "seed": "npm run build -w @flakeradar/core && npm run seed -w @flakeradar/server",
+    "start": "npm run start -w @flakeradar/server",
+    "test": "npm run build -w @flakeradar/core && npm run test -w @flakeradar/core && npm run test -w @flakeradar/server",
+    "typecheck": "npm run build -w @flakeradar/core && npm run typecheck -w @flakeradar/server && npm run typecheck -w @flakeradar/web"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.5"
+  }
+}
