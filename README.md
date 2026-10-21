@@ -2,6 +2,8 @@
 
 **Find the flaky tests in your CI, and stop letting them block pull requests.**
 
+**[Live demo](https://vojvodixdev.github.io/flakeradar/)** with sample data from two fictional projects. No sign-up, nothing to install.
+
 FlakeRadar is a self-hosted service for your CI (GitHub Actions, GitLab CI or
 anything else). It collects the JUnit reports your test runner already produces, scores every test for flakiness,
 and comments on each pull request with which failures are real regressions and
@@ -268,7 +270,9 @@ npm run build:demo  # static, backend-free demo in apps/web/dist-demo
 
 The static demo bundles a snapshot of the seeded demo data, so it can be
 hosted on any static site (or opened straight from disk) without a server.
-Dates are shifted at load time so the sample data always looks recent.
+Dates are shifted at load time so the sample data always looks recent. The
+`Demo site` workflow builds it and publishes it to GitHub Pages on every
+push to `main`.
 
 ## Roadmap
 
