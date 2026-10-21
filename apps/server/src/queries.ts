@@ -157,13 +157,13 @@ function recentOutcomes(db: DB, testIds: number[]): Map<number, string> {
   const rows = db
     .prepare(
       `SELECT test_id AS testId, status FROM (
-         SELECT test_id, status, created_at,
-                ROW_NUMBER() OVER (PARTITION BY test_id ORDER BY created_at DESC) AS rn
+         SELECT id, test_id, status, created_at,
+                ROW_NUMBER() OVER (PARTITION BY test_id ORDER BY created_at DESC, id DESC) AS rn
            FROM executions
           WHERE test_id IN (${testIds.map(() => '?').join(',')})
        )
        WHERE rn <= ${RECENT_LENGTH}
-       ORDER BY test_id, created_at`,
+       ORDER BY test_id, created_at, id`,
     )
     .all(...testIds) as { testId: number; status: string }[];
   for (const r of rows) result.set(r.testId, (result.get(r.testId) ?? '') + r.status[0]);
@@ -226,7 +226,7 @@ export function testDetail(db: DB, projectId: number, testId: number, historyLim
                 e.status, e.attempt, e.duration_ms AS durationMs, e.message, e.verdict, e.created_at AS createdAt
            FROM executions e JOIN runs r ON r.id = e.run_id
           WHERE e.test_id = ?
-          ORDER BY e.created_at DESC
+          ORDER BY e.created_at DESC, e.id DESC
           LIMIT ?`,
       )
       .all(testId, historyLimit) as Array<Omit<HistoryEntry, 'trusted'> & { trusted: number }>
@@ -270,7 +270,7 @@ export function listRuns(db: DB, projectId: number, limit = 50): RunListItem[] {
               duration_ms AS durationMs, noise_failures AS noiseFailures, real_failures AS realFailures,
               created_at AS createdAt
          FROM runs WHERE project_id = ?
-        ORDER BY created_at DESC
+        ORDER BY created_at DESC, id DESC
         LIMIT ?`,
     )
     .all(projectId, Math.min(limit, 500)) as Array<Omit<RunListItem, 'trusted'> & { trusted: number }>;

@@ -217,6 +217,22 @@ describe('reading data', () => {
     expect(detail.reasons.length).toBeGreaterThan(0);
   });
 
+  it('keeps upload order when several runs share the same timestamp', async () => {
+    // Regression test: this used to be flaky in CI when uploads landed in the
+    // same millisecond and SQLite returned ties in arbitrary order.
+    const { project, token } = await createProject();
+    const timestamp = '2026-10-01T12:00:00.000Z';
+    await upload(token, [junit({ a: 'fail' })], { timestamp });
+    await upload(token, [junit({ a: 'fail' })], { timestamp });
+    await upload(token, [junit({ a: 'pass' })], { timestamp });
+
+    const [item] = (await app.inject(`/api/projects/${project.slug}/tests`)).json() as TestListItem[];
+    expect(item!.recent).toBe('ffp');
+    const detail = (await app.inject(`/api/projects/${project.slug}/tests/${item!.id}`)).json() as TestDetail;
+    expect(detail.history.map((h) => h.status)).toEqual(['passed', 'failed', 'failed']);
+    expect(detail.failStreak).toBe(0);
+  });
+
   it('searches tests safely, treating LIKE wildcards literally', async () => {
     const { project, token } = await createProject();
     await upload(token, [junit({ '100% coverage': 'pass', 'plain name': 'pass' })]);

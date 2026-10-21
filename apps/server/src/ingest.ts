@@ -196,7 +196,7 @@ export function rescoreTests(db: DB, testIds: number[]): Map<number, number> {
     `SELECT e.status, e.duration_ms AS durationMs, e.created_at AS at, r.commit_sha AS commitSha, r.trusted
        FROM executions e JOIN runs r ON r.id = e.run_id
       WHERE e.test_id = ? AND e.status != 'skipped'
-      ORDER BY e.created_at DESC
+      ORDER BY e.created_at DESC, e.id DESC
       LIMIT ${HISTORY_WINDOW}`,
   );
   const update = db.prepare(
@@ -215,7 +215,10 @@ export function rescoreTests(db: DB, testIds: number[]): Map<number, number> {
       commitSha: string;
       trusted: number;
     }>;
-    const samples: ExecutionSample[] = rows.map((r) => ({
+    // Rows come newest first. Hand them over oldest first, so executions that
+    // share a timestamp keep their insertion order through the stable sort
+    // inside analyzeFlakiness.
+    const samples: ExecutionSample[] = [...rows].reverse().map((r) => ({
       status: r.status,
       at: r.at,
       commitSha: r.commitSha,
