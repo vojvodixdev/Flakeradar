@@ -1,0 +1,44 @@
+# Example: a Node project using Vitest, reporting to FlakeRadar.
+# Copy into .github/workflows/ in the repository you want to monitor.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write # lets FlakeRadar comment on the pull request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Any runner that writes JUnit XML works. For Vitest:
+      - run: npx vitest run --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml
+
+      - name: Report results to FlakeRadar
+        if: ${{ !cancelled() }} # also run when tests failed
+        run: |
+          curl -fsSL "$FLAKERADAR_SERVER_URL/api/uploader.mjs" -o "$RUNNER_TEMP/flakeradar.mjs"
+          node "$RUNNER_TEMP/flakeradar.mjs"
+        env:
+          FLAKERADAR_SERVER_URL: https://flakes.example.com
+          FLAKERADAR_TOKEN: ${{ secrets.FLAKERADAR_TOKEN }}
+          FLAKERADAR_JUNIT_PATHS: reports/junit.xml
+          FLAKERADAR_GITHUB_TOKEN: ${{ github.token }}
+
+# JUnit output for other runners:
+#   Jest          jest --reporters=default --reporters=jest-junit
+#   Playwright    npx playwright test --reporter=junit (PLAYWRIGHT_JUNIT_OUTPUT_NAME=reports/junit.xml)
+#   pytest        pytest --junitxml=reports/junit.xml
+#   Go            gotestsum --junitfile reports/junit.xml
+#   Maven/Gradle  already write target/surefire-reports/*.xml or build/test-results/**/*.xml

@@ -1,0 +1,16 @@
+services:
+  flakeradar:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # Public URL of the dashboard, used for links in pull request comments.
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:3000}
+      # Protects project creation and quarantining. Change this.
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-change-me}
+    volumes:
+      - flakeradar-data:/data
+    restart: unless-stopped
+
+volumes:
+  flakeradar-data:
