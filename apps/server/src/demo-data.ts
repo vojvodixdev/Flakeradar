@@ -181,6 +181,16 @@ function mobileApiTests(): DemoTest[] {
   tests.find((x) => x.name === 'test_handles_clock_skew')!.messages = CLOCK;
   tests.find((x) => x.name === 'test_caches_for_60_seconds')!.behaviour = { kind: 'flaky', p: 0.07 };
   tests.find((x) => x.name === 'test_caches_for_60_seconds')!.messages = ['AssertionError: assert 2 == 1 (ranker called twice)'];
+  // A nod to FlakeRadar's own history: its test suite once had a flaky test too.
+  tests.push({
+    classname: 'test_meta.FlakeRadar',
+    name: 'test_flakeradar_finds_its_own_flaky_test',
+    file: 'tests/test_meta.py',
+    e2e: false,
+    baseMs: 42,
+    behaviour: { kind: 'flaky', p: 0.15 },
+    messages: ['AssertionError: two uploads landed in the same millisecond and came back in a different order'],
+  });
   return tests;
 }
 
